@@ -6,7 +6,6 @@ class Shower:
         self.water_hot = 0.2*self.water_flow
         self.water_cold= 0.8*self.water_flow
         self.height = 150  # Initial height of the rod
-        self.height = 150  # Initial height of the rod
         self.max_height = max_height  # Maximum height of the rod
         self.soap_vector=[0,0,0,0]
 
@@ -60,33 +59,42 @@ class Shower:
 
         print(f"Rod height set to {self.height} cm")
 
-    def dispense_soap(self, duration):
-        print(f"Dispensing soap for {duration} seconds")
-        time.sleep(duration)
+    def dispense_soap(self, soap_type):
+        # המרת מילת הסבון לווקטור המתאים
+        soap_map = {
+            "shampoo": 0,
+            "conditioner": 1,
+            "body wash": 2
+        }
 
+        if soap_type in soap_map:
+            self.soap_vector = [0, 0, 0, 0]  # אתחול כל הוקטור
+            self.soap_vector[soap_map[soap_type]] = 1
+            print(f"Dispensing {soap_type}")
+            print(f"Soap vector: {self.soap_vector}")
+
+        elif soap_type == "finish":
+            self.soap_vector = [0, 0, 0, 0]
+            print("Stopping all soap dispensing")
+            print(f"Soap vector: {self.soap_vector}")
+        else:
+            print("Invalid soap type")
 
     def finish_shower(self):
-        return
-
+        print("Finishing shower...")
+        self.water_flow = 0  # מאפסת את זרימת המים
+        self.soap_vector = [0, 0, 0, 0]  # מאפסת את וקטור הסבונים
+        print("Water flow stopped.")
+        print("Soap vector reset.")
+        
+        # חיטוי המקלחת לאחר 10 דקות
+        time.sleep(600)  # 10 דקות = 600 שניות
+        self.disinfect()
 
     def disinfect(self):
-        print("Disinfecting sponges...")
-        time.sleep(5)  # Assume disinfection takes 5 seconds
-        print("Sponges disinfected")
+        print("Starting disinfection...")
+        self.set_height("up")  # כוונון גובה מקסימלי של הטוש
+        self.soap_vector[3] = 1  # הפעלת זרימת חומר חיטוי
+        print(f"Soap vector (disinfection): {self.soap_vector}")
 
-    def execute_command(self, command):
-        if command['action'] == 'set_height':
-            self.set_height(command['value'])
-        elif command['action'] == 'set_delay':
-            self.set_delay(command['value'])
-        elif command['action'] == 'set_water_flow':
-            self.set_water_flow(command['value'])
-        elif command['action'] == 'dispense_soap':
-            self.dispense_soap(command['value'])
-        elif command['action'] == 'set_water_temperature':
-            self.set_water_temperature(command['value'])
-        elif command['action'] == 'disinfect_sponges':
-            self.disinfect_sponges()
-
-    # Example usage
 

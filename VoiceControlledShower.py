@@ -1,3 +1,5 @@
+import time;
+
 class VoiceControlledShower:
     def __init__(self):
         self.height = 0  # Initial height of the rod

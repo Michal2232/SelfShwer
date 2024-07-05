@@ -21,29 +21,33 @@ def move_shower(command):
 def update(frame):
     global shower_position
 
-    # ניקוי הגרף וציור מחדש
+    # Clear the plot and redraw
     plt.clf()
     plt.ylim(0, 10)
     plt.xlim(0, 1)
     plt.title("Shower System Simulation")
     plt.ylabel("Height")
 
-    # ציור קו של ראש המקלחת ותיאור
-    plt.plot([0, 1], [shower_position, shower_position], 'b-', linewidth=5)
+    # Determine line thickness based on water flow strength
+    if shower.water_flow == 'strong':
+        line_width = 10
+    elif shower.water_flow == 'weak':
+        line_width = 2
+    else:
+        line_width = 5  # Default thickness
+
+    # Draw shower head line and label
+    plt.plot([0, 1], [shower_position, shower_position], 'b-', linewidth=line_width)
     plt.text(0.5, shower_position, f"Shower Head", ha='center', va='bottom')
 
-    # ציור של עוצמת המים
-    water_flow_height = shower.water_flow * 10  # כדי להציג בסוגריים שלה מצב נתון
-    plt.plot([0.1, 0.4], [water_flow_height, water_flow_height], 'r-', linewidth=3)
-    plt.text(0.45, water_flow_height, f"Water Flow: {shower.water_flow:.2f}", ha='left', va='bottom')
-
-    # עדכון והצגה של סוגי הסבון
+    # Update and display soap types
     soap_types = ["Shampoo", "Conditioner", "Body Wash", "Finish"]
     for i, soap in enumerate(soap_types):
         if shower.soap_vector[i] == 1:
-            plt.text(0.1, 9-i, f"{soap} Dispensed", fontsize=8)
+            plt.text(0.1, 9 - i, f"{soap} Dispensed", fontsize=8)
 
     return plt.gca()
+
 
 # יצירת האנימציה
 fig = plt.figure(figsize=(6, 8))
